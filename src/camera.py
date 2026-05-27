@@ -1,4 +1,5 @@
 import cv2
+import utils.grid as gr
 
 def get_camera(index = 1):
 	cap = cv2.VideoCapture(index)
@@ -14,9 +15,14 @@ def run_preview():
 
 	while True:
 		ret, frame = cap.read()
-		frame = cv2.flip(frame, 1)
 		if not ret:
 			break
+		frame = cv2.flip(frame, 1)
+		edges = gr.preprocess(frame)
+		lines = gr.find_lines(edges)
+		hor, ver = gr.classify_lines(lines)
+		#frame = gr.draw_lines(frame, hor)
+		frame = gr.draw_lines(frame, ver)
 		cv2.imshow("Camera preview", frame)
 		key = cv2.waitKey(1) & 0xFF
 		if key == ord('q'):

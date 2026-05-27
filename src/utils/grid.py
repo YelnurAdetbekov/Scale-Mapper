@@ -12,7 +12,7 @@ def find_lines(edges):
 		edges,
 		rho=1,
 		theta=np.pi / 180,
-		threshold=80,
+		threshold=85,
 		minLineLength=100,
 		maxLineGap=20
 	)
@@ -22,3 +22,13 @@ def draw_lines(frame, lines):
 		x1, y1, x2, y2 = line[0]
 		cv2.line(frame, (x1, y1), (x2, y2), (0, 255, 0), 1)
 	return frame
+def classify_lines(lines):
+	horizontal, vertical = [], []
+	for line in lines:
+		x1, y1, x2, y2 = line[0]
+		angle = np.degrees(np.arctan2(abs(y2 - y1), abs(x2 - x1)))
+		if angle < 20:          # nearly horizontal → strings
+			horizontal.append(line)
+		elif angle > 70:        # nearly vertical → frets
+			vertical.append(line)
+	return horizontal, vertical
