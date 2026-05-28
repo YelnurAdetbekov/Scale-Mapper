@@ -10,6 +10,8 @@ class FretboardDetector:
 	def __init__(self, model_path):
 		self.model = YOLO(model_path)
 		self.history = deque(maxlen=2)
+		self.history.append(np.zeros((4,2), dtype=np.float32))
+		self.history.append(np.zeros((4,2), dtype=np.float32))
 
 	def detect(self, frame, conf=0.5):
 		h, w = frame.shape[:2]
@@ -17,7 +19,7 @@ class FretboardDetector:
 		mask_coordinates = self.model(small, verbose = False, device = "mps")[0]
 
 		if(mask_coordinates.masks is None):
-			return self._smoothed()
+			return np.zeros((4,2), dtype=np.float32)
 
 		idx = int(mask_coordinates.boxes.conf.argmax())
 		conf_val = float(mask_coordinates.boxes.conf[idx])
@@ -39,5 +41,4 @@ class FretboardDetector:
 	def _smoothed(self):
 		if not self.history:
 			return None
-		print(np.mean(self.history, axis=0).astype(np.float32))
-		return np.mean(self.history, axis=0).astype(np.float32)
+		return (self.history[0]*0.2 + self.history[1]*0.8)
