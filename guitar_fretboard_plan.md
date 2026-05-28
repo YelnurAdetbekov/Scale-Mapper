@@ -840,7 +840,7 @@ from collections import deque
 class FretboardDetector:
     def __init__(self, ...):
         ...
-        self.history = deque(maxlen=8)   # average over last 8 frames
+        self.history = deque(maxlen=3)   # average over last 3 frames
 
     def detect(self, frame, conf_threshold=0.5):
         # ... get best_box as before ...
