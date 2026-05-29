@@ -1,7 +1,7 @@
 import cv2
 from src.camera import get_camera
 
-def collect_dataset(save_dir = "data/raw_images", target = 400):
+def collect_dataset(save_dir = "data/raw_images", target = 30):
 	import time
 	import os
 	os.makedirs(save_dir, exist_ok=True)

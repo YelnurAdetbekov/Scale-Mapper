@@ -9,7 +9,8 @@ SMALL_X, SMALL_Y = 640, 360
 class FretboardDetector:
 	def __init__(self, model_path):
 		self.model = YOLO(model_path)
-		self.history = deque(maxlen=2)
+		self.history = deque(maxlen=3)
+		self.history.append(np.zeros((4,2), dtype=np.float32))
 		self.history.append(np.zeros((4,2), dtype=np.float32))
 		self.history.append(np.zeros((4,2), dtype=np.float32))
 
@@ -34,4 +35,4 @@ class FretboardDetector:
 	def _smoothed(self):
 		if not self.history:
 			return None
-		return (self.history[0]*0.2 + self.history[1]*0.8)
+		return (self.history[0]*0.2 + self.history[1]*0.4 + self.history[2]*0.4)

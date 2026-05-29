@@ -14,7 +14,7 @@ def extract_corners(polygon: np.ndarray):
 	bl  = pts[np.argmin(x - y)]   # min(x-y)
 	return np.array([tl, tr, br, bl], dtype = np.float32)
 
-def build_warp(corners: np.ndarray, out_w=800, out_h=200):
+def build_warp(corners: np.ndarray, out_w=1280, out_h=166):
 	dst = np.array([ # A straight rectangle
 		[0, 0], 
 		[out_w, 0],
@@ -24,7 +24,7 @@ def build_warp(corners: np.ndarray, out_w=800, out_h=200):
 	return (cv2.getPerspectiveTransform(corners, dst), 
 			cv2.getPerspectiveTransform(dst, corners))
 
-def warp_frame(frame, M, out_w=800, out_h=200):
+def warp_frame(frame, M, out_w=1280, out_h=166):
 	return cv2.warpPerspective(frame, M, (out_w, out_h)) #src, M, size
 
 def project_point_black(pt, M_inv):
