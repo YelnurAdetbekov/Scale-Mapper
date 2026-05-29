@@ -17,7 +17,7 @@ class FretboardDetector:
 		mask_coordinates = self.model(small, verbose = False, device = "mps")[0]
 
 		if(mask_coordinates.masks is None):
-			return np.zeros((4,2), dtype=np.float32)
+			return self._smoothed()
 
 		idx = int(mask_coordinates.boxes.conf.argmax())
 		conf_val = float(mask_coordinates.boxes.conf[idx])
@@ -34,4 +34,6 @@ class FretboardDetector:
 		return self._smoothed()
 
 	def _smoothed(self):
+		if not self.history:
+			return None
 		return np.mean(self.history, axis=0).astype(np.float32)

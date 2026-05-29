@@ -4,6 +4,8 @@ SCREEN_WIDTH = 1280
 MAX_FRET = 22
 
 distances = {
+	-1: 0,
+	0: 0,
 	1: 53,
 	2: 95,
 	3: 134,
@@ -40,7 +42,7 @@ OPEN_POSITIONS = {
 NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 MAJOR_SCALE = np.array([0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24])
-MINOR_SCALE = np.array([0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 21, 22, 24])
+MINOR_SCALE = np.array([0, 2, 3, 5, 7, 8, 10, 12, 14, 15, 17, 19, 20, 22, 24])
 
 SCALES = {
 	"major": MAJOR_SCALE,
