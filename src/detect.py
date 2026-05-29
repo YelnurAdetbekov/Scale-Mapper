@@ -9,13 +9,12 @@ SMALL_X, SMALL_Y = 640, 360
 class FretboardDetector:
 	def __init__(self, model_path):
 		self.model = YOLO(model_path)
-		self.history = deque(maxlen=3)
-		self.history.append(np.zeros((4,2), dtype=np.float32))
-		self.history.append(np.zeros((4,2), dtype=np.float32))
-		self.history.append(np.zeros((4,2), dtype=np.float32))
+		self.history = deque(maxlen=7)
 
 	def detect(self, frame, conf=0.5):
-		mask_coordinates = self.model(frame, verbose = False, device = "mps")[0]
+		h, w = frame.shape[:2]
+		small = cv2.resize(frame, (SMALL_X, SMALL_Y))
+		mask_coordinates = self.model(small, verbose = False, device = "mps")[0]
 
 		if(mask_coordinates.masks is None):
 			return np.zeros((4,2), dtype=np.float32)
@@ -26,13 +25,13 @@ class FretboardDetector:
 		if conf_val<conf:
 			return self._smoothed()
 
-		polygon = mask_coordinates.masks.xy[idx] # (N,2)
+		polygon = mask_coordinates.masks.xy[idx].copy() # (N,2)
+		polygon[:, 0] *= w / SMALL_X
+		polygon[:, 1] *= h / SMALL_Y
 
 		corners = extract_corners(polygon) #(4,2)
 		self.history.append(corners)
 		return self._smoothed()
 
 	def _smoothed(self):
-		if not self.history:
-			return None
-		return (self.history[0]*0.2 + self.history[1]*0.4 + self.history[2]*0.4)
+		return np.mean(self.history, axis=0).astype(np.float32)
