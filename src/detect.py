@@ -9,7 +9,7 @@ SMALL_X, SMALL_Y = 640, 360
 class FretboardDetector:
 	def __init__(self, model_path):
 		self.model = YOLO(model_path)
-		self.history = deque(maxlen=7)
+		self.history = deque(maxlen=6)
 
 	def detect(self, frame, conf=0.5):
 		h, w = frame.shape[:2]
