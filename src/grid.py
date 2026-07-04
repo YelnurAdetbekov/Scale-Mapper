@@ -48,7 +48,7 @@ SCALES = {
 	"major": MAJOR_SCALE,
 	"minor": MINOR_SCALE
 }
-chosen_scale = ['E', "major"]
+chosen_scale = ['D#', "minor"]
 
 def choose_scale(chosen_scale):
 	return (NOTES.index(chosen_scale[0]), chosen_scale[1])
@@ -75,7 +75,8 @@ def compute_frets(c):
 	frets_4 = np.unique(frets_4[frets_4 < MAX_FRET])
 	frets_5 = np.unique(frets_5[frets_5 < MAX_FRET])
 	frets_6 = np.unique(frets_6[frets_6 < MAX_FRET])
-	return np.array([frets_1, frets_2,frets_3,frets_4,frets_5,frets_6])
+	# print([frets_1, frets_2,frets_3,frets_4,frets_5,frets_6])
+	return [frets_1, frets_2,frets_3,frets_4,frets_5,frets_6]
 
 def compute_stretched_fretboard():
 	factor = SCREEN_WIDTH/(list(distances.values())[-1])

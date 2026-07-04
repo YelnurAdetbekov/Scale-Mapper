@@ -17,14 +17,13 @@ string_offset = 0
 temp = 0
 fret_boxes = [[],[],[],[],[],[]]
 i = 0
-for string in compute_frets(choose_scale(['D', "major"])):
+for string in compute_frets(choose_scale(['D#', "minor"])):
 	temp = string_offset
 	string_offset += WARPED_HEIGHT/6
 	for fret in string:
 		points = (int(frets_dict[fret-1]), int(temp)), (int(frets_dict[fret]),int(string_offset))
 		fret_boxes[i].append(points)
 	i += 1
-print(fret_boxes)
 
 while True:
 	ret, frame = cap.read()
@@ -35,6 +34,7 @@ while True:
 
 	corners = detector.detect(frame) #nd.array(4,2)
 
+	# print(corners, "\n")
 	if corners is None or len(corners) != 4:
 		cv2.imshow("Original", frame)
 		continue

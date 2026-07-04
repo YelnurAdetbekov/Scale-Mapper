@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from pathlib import Path
 
 def extract_corners(polygon: np.ndarray):
 
@@ -31,3 +32,19 @@ def project_point_black(pt, M_inv):
 	p = np.array([[[pt[0], pt[1]]]], dtype=np.float32) #specific point to map
 	back = cv2.perspectiveTransform(p, M_inv) #warped coords -> original coords
 	return tuple(back[0][0].astype(int))
+
+
+def load_camera_calibration(calibration_path):
+	calibration_path = Path(calibration_path)
+	if not calibration_path.exists():
+		return None, None
+
+	data = np.load(calibration_path)
+	return data["camera_matrix"], data["dist_coeffs"]
+
+
+def undistort_frame(frame, camera_matrix=None, dist_coeffs=None):
+	if camera_matrix is None or dist_coeffs is None:
+		return frame
+
+	return cv2.undistort(frame, camera_matrix, dist_coeffs)
