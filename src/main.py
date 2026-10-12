@@ -6,8 +6,9 @@ import numpy as np
 from grid import compute_stretched_fretboard, compute_frets, choose_scale
 
 MODEL = "runs/segment/models/runs/fretboard_seg_v2/weights/best.pt"
-WARPED_HEIGHT = 166
-WARPED_WIDTH = 1280
+
+WARPED_RESOLUTION = (1280, 166)
+width, height = WARPED_RESOLUTION
 
 detector = FretboardDetector(MODEL)
 cap = get_camera()
@@ -17,9 +18,9 @@ string_offset = 0
 temp = 0
 fret_boxes = [[],[],[],[],[],[]]
 i = 0
-for string in compute_frets(choose_scale(['D#', "minor"])):
+for string in compute_frets(choose_scale(['A', "minor"])):
 	temp = string_offset
-	string_offset += WARPED_HEIGHT/6
+	string_offset += height/6
 	for fret in string:
 		points = (int(frets_dict[fret-1]), int(temp)), (int(frets_dict[fret]),int(string_offset))
 		fret_boxes[i].append(points)
@@ -45,16 +46,16 @@ while True:
 
 	pts = corners.astype(np.int32)
 
-	overlay_lines = np.zeros((WARPED_HEIGHT, WARPED_WIDTH, 3), dtype=np.uint8)
+	overlay_lines = np.zeros((height, width, 3), dtype=np.uint8)
 	overlay_rects = np.zeros_like(overlay_lines)
 	overlay_centers = np.zeros_like(overlay_lines)
 
 	for fret_x in frets_dict.values():
-		cv2.line(overlay_lines, (int(fret_x), WARPED_HEIGHT), (int(fret_x), 0), color=(0,0,255), thickness=2)
+		cv2.line(overlay_lines, (int(fret_x), height), (int(fret_x), 0), color=(0,0,255), thickness=2)
 	
 	for string in fret_boxes:
 		for box in string:
-			cv2.line(overlay_lines, (0, box[0][1]), (WARPED_WIDTH, box[0][1]), color=(0,0,255), thickness=2)
+			cv2.line(overlay_lines, (0, box[0][1]), (width, box[0][1]), color=(0,0,255), thickness=2)
 			cv2.rectangle(overlay_rects, box[0], box[1], color = (0,255,0), thickness=-1)
 			
 			center_x = (box[0][0] + box[1][0]) // 2

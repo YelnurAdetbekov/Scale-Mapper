@@ -1,8 +1,8 @@
 import os, random
 import cv2
 
-img_dir = "data/dataset/train/images"
-lbl_dir = "data/dataset/train/labels"
+img_dir = "data/dataset/test/images"
+lbl_dir = "data/dataset/test/labels"
 
 samples = random.sample(os.listdir(img_dir), 5)
 for fname in samples:

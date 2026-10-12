@@ -44,6 +44,9 @@ MANIFEST
 *.manifest
 *.spec
 
+# Models
+yolov8n-seg.pt
+
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
@@ -66,6 +69,9 @@ cover/
 
 #dataset
 data
+roboflow.py
+train.py
+
 # Translations
 *.mo
 *.pot

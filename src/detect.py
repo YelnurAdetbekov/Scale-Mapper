@@ -1,6 +1,5 @@
 from ultralytics import YOLO
 import numpy as np
-from collections import deque
 from warp import extract_corners
 import cv2
 import time
@@ -12,7 +11,7 @@ FEATURE_THRESHOLD = 80
 class FretboardDetector:
 	def __init__(self, model_path):
 		self.model = YOLO(model_path)
-		self.smoothing_alpha = 0.7
+		self.smoothing_alpha = 0.75
 
 		self.prev_gray = None
 		self.prev_points = None
@@ -100,7 +99,7 @@ class FretboardDetector:
 		gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 		now = time.monotonic()
 		
-		if self.prev_gray is None or (now - self.last_yolo_time) >= 6:
+		if self.prev_gray is None or (now - self.last_yolo_time) >= 4:
 			return self._detect_with_yolo(frame, gray)
 		
 		ok, corners = self._track(gray)
