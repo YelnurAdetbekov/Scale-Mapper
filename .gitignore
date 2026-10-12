@@ -44,9 +44,6 @@ MANIFEST
 *.manifest
 *.spec
 
-# Models
-yolov8n-seg.pt
-
 # Installer logs
 pip-log.txt
 pip-delete-this-directory.txt
